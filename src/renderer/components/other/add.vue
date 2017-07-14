@@ -20,8 +20,10 @@
                 </el-date-picker>
             </el-form-item>
             <el-form-item label="额外信息：">
+                <br v-if="formAdd.message.length === 0">
                 <el-tag
-                        :key="tag"
+                        v-else
+                        :key="tag.name"
                         :hit=true
                         type="primary"
                         v-for="tag in formAdd.message"
@@ -29,19 +31,22 @@
                         :close-transition="false"
                         @close="handleClose(tag)"
                 >
-                    {{tag}}
+                    {{tag.name}}
                 </el-tag>
-                <el-input
-                        class="input-new-tag"
-                        v-if="inputVisible"
-                        v-model="inputValue"
-                        ref="saveTagInput"
-                        size="mini"
-                        @keyup.enter.native="handleInputConfirm"
-                        @blur="handleInputConfirm"
-                >
-                </el-input>
-                <el-button class="button-new-tag" v-else size="small" @click="showInput">+ New Tag</el-button>
+                <el-form :inline="true" :model="message" class="demo-form-inline">
+                    <el-form-item label="信息名称">
+                        <el-input v-model="message.name"></el-input>
+                    </el-form-item>
+                    <el-form-item label="信息种类">
+                        <el-select v-model="message.type" style="width: 100px">
+                            <el-option label="文本" value="textarea"></el-option>
+                            <el-option label="信息" value="input" ></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="onSubmit">查询</el-button>
+                    </el-form-item>
+                </el-form>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -53,10 +58,16 @@
 
 <script>
     import {add} from '../../api/api'
+    import ElInput from "../../../../node_modules/element-ui/packages/input/src/input";
+    import ElFormItem from "../../../../node_modules/element-ui/packages/form/src/form-item";
     export default{
+        components: {
+            ElFormItem,
+            ElInput
+        },
         data(){
-            return{
-                dialogVisible:false,
+            return {
+                dialogVisible: false,
                 pickerOptions: {
                     disabledDate(time) {
                         return time.getTime() < Date.now() - 8.64e7;
@@ -86,9 +97,13 @@
                 inputVisible: false,
                 inputValue: '',
                 loadingAdd: false,
+                message: {
+                    name: '',
+                    type: 'input',
+                }
             }
         },
-        methods:{
+        methods: {
             addActivity(){
                 this.$refs.formAdd.validate((valid) => {
                     if (valid) {
@@ -121,17 +136,18 @@
             },
             showInput(){
                 this.inputVisible = true;
-                this.$nextTick(_ => {
+                this.$nextTick(() => {
                     this.$refs.saveTagInput.$refs.input.focus();
                 });
             },
-            handleInputConfirm(){
-                let inputValue = this.inputValue;
-                if (inputValue) {
-                    this.formAdd.message.push(inputValue);
+            onSubmit(){
+                if (this.message.name!=='') {
+                    this.formAdd.message.push(this.message);
                 }
-                this.inputVisible = false;
-                this.inputValue = '';
+                this.message = {
+                    name: '',
+                    type: 'input',
+                }
             },
             getMessage(){
                 this.$emit("get")

@@ -4,6 +4,7 @@ import Login from '../components/Login.vue'
 import StudentHome from '../components/student/student.vue'
 import TeacherHome from '../components/teacher/teacher.vue'
 import Home from '../components/Home.vue'
+import Text from '../components/student/text.vue'
 import Table from '../components/student/huodong.vue'
 import Message from '../components/student/activity.vue'
 import Jion from '../components/teacher/Jion.vue'
@@ -25,6 +26,7 @@ export default new Router({
             children: [
                 {path: '/student/activitied', component: Table},
                 {path: '/student/activity/:id', component: Message},
+                {path: '/student/text', component: Text}
             ]
         },
         {

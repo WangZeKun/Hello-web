@@ -11,6 +11,7 @@ import router from './router'
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios
 Vue.config.productionTip = false
+
 Vue.use(ElementUI)
 /* eslint-disable no-new */
 
@@ -25,13 +26,12 @@ router.beforeEach((to, from, next) => {
     let type1 = sessionStorage.getItem('type');
     if (!user && to.path != '/login') {
         next({path: '/login'})
-    } else if(to.path.indexOf(type1) === -1 && to.path != '/login'){
-        next({path:'/'+type1})
-    } else{
+    } else if (to.path.indexOf(type1) === -1 && to.path != '/login') {
+        next({path: '/' + type1})
+    } else {
         next()
     }
 });
-
 
 new Vue({
     components: {App},

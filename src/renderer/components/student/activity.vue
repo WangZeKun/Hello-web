@@ -5,9 +5,16 @@
         <xmp>{{activity.Introduction}}</xmp>
         <br>
         <br>
-        <el-form ref="form" :model="form" label-width="80px" v-if="form.length!==0" :inline="true" class="demo-form-inline left" :rules="rules">
-            <el-form-item  v-for="(i,name) in form" v-bind:label="name" :key="name">
-                <el-input v-model="form[name]"></el-input>
+        <el-form ref="form" :model="form" label-width="80px" v-if="form.length!==0" :inline="true" class="left"
+                 :rules="rules">
+            <el-form-item v-for="(m,i) in activity.Message" v-bind:label="m.name" :key="i" v-if="m.type==='input'">
+                <el-input  v-model="form[m.name]"></el-input>
+            </el-form-item>
+        </el-form>
+        <el-form :model="form" label-width="80px" v-if="form.length!==0" class="left"
+                 :rules="rules" style="padding-right: 60px">
+            <el-form-item v-for="(m,i) in activity.Message" v-bind:label="m.name" :key="i" v-if="m.type==='textarea'">
+                <el-input  type="textarea" autosize v-model="form[m.name]"></el-input>
             </el-form-item>
         </el-form>
         <el-button type="primary" @click="jion1(activity.Id)" v-loading="loadingbutton">报名活动</el-button>
@@ -23,23 +30,9 @@
             return {
                 activity: {},
                 loading: true,
-                loadingbutton:false,
-                form: {
-                },
-                rules: {
-                    account: [
-                        {required: true, message: '请输入账号', trigger: 'blur'},
-                        //{ validator: validaePass }
-                    ],
-                    checkPass: [
-                        {required: true, message: '请输入密码', trigger: 'blur'},
-                        //{ validator: validaePass2 }
-                    ],
-                    select: [
-                        {required: true, message: '请选择用户'},
-                        //{ validator: validaePass2 }
-                    ]
-                },
+                loadingbutton: false,
+                form: {},
+                rules: {}
             }
         },
         methods: {
@@ -50,18 +43,18 @@
                     .then(res => {
                         this.loading = false;
                         this.activity = res;
-                        for (let x of this.activity.Message){
-                            this.form[x]=''
-                            this.rules[x]=[
+                        for (let x of this.activity.Message) {
+                            this.form[x.name] = ''
+                            this.rules[x.name] = [
                                 {required: true, message: '请输入信息', trigger: 'blur'},
                             ]
                         }
-                        console.log(JSON.stringify(this.activity))
+                        console.log(this.form)
                     })
             },
             jion1(id){
                 this.loadingbutton = true
-                setJion(id,JSON.stringify(this.form)).then(m => {
+                setJion(id, JSON.stringify(this.form)).then(m => {
                     this.$message({
                         message: m,
                         type: m === '您已经报过名了！' ? 'error' : 'success',
@@ -84,15 +77,17 @@
     section {
         text-align: center;
     }
+
     xmp {
-        font-size:15px;
+        font-size: 15px;
         text-align: left;
         padding-left: 30px;
         padding-right: 30px;
         white-space: pre-wrap;
         word-wrap: break-word;
     }
-    .left{
+
+    .left {
         text-align: left;
     }
 </style>

@@ -1,11 +1,8 @@
 import axios from 'axios'
 
-// const url = 'http://47.94.91.118/v1';
+// const url = 'http://127.0.0.1:8888/v1';
 const url = 'https://api.gqmms.wang/v1'
-
-let http = axios.create({
-    withCredentials: true
-});
+axios.defaults.withCredentials = true
 
 /**
  *
@@ -21,8 +18,10 @@ export function requestLogin(username, password, select) {
     params.append('select', select);
     params.append('password', password);
     params.append('username', username);
-    return http.post(`${url}/message/login`, params)
-        .then(res => res.data)
+    return axios.post(`${url}/message/login`, params,{})
+        .then(res => {
+            return res.data
+        })
         .catch(err => {
             console.log(err);
             return {Message: '服务器错误，请稍后重试'}
@@ -35,7 +34,7 @@ export function requestLogin(username, password, select) {
  * @return {Object}
  */
 export function getStudentActivity(who) {
-    return http.get(`${url}/student/activity`, {params: {who: who}})
+    return axios.get(`${url}/student/activity`, {params: {who: who}})
         .then(res => res.data)
         .catch(err => {
             console.log(err)
@@ -47,7 +46,7 @@ export function getStudentActivity(who) {
  @return {Object}
  */
 export function getCanjia() {
-    return http.get(`${url}/student/canjia`)
+    return axios.get(`${url}/student/canjia`)
         .then(res => res.data)
         .catch(err => {
             console.log(err)
@@ -60,7 +59,7 @@ export function getCanjia() {
  * @return {Object}
  * */
 export function getSingle(id) {
-    return http.get(`${url}/message/single`, {params: {id: id}})
+    return axios.get(`${url}/message/single`, {params: {id: id}})
         .then(res => res.data)
         .catch(err => {
             console.log(err)
@@ -73,7 +72,7 @@ export function getSingle(id) {
  * @param message 活动的额外信息
  */
 export function setJion(id, message) {
-    return http.get(`${url}/student/join`, {params: {id: id, message: message}})
+    return axios.get(`${url}/student/join`, {params: {id: id, message: message}})
         .then(res => res.data)
         .catch(err => {
             console.log(err)
@@ -86,7 +85,7 @@ export function setJion(id, message) {
  * @param status {string} ['now','end']
  * */
 export function getTeacherActivity(status) {
-    return http.get(`${url}/teacher/activities`, {params: {status: status}})
+    return axios.get(`${url}/teacher/activities`, {params: {status: status}})
         .then(res => res.data)
         .catch(err => {
             console.log(err)
@@ -96,7 +95,7 @@ export function getTeacherActivity(status) {
 /**
  * @method 退出登录*/
 export function exit() {
-    http.get(`${url}/message/exit`).catch(err => console.log(err))
+    axios.get(`${url}/message/exit`).catch(err => console.log(err))
 }
 
 /**
@@ -104,7 +103,7 @@ export function exit() {
  * @param id {number} 活动id
  * */
 export function getJions(id) {
-    return http.get(`${url}/teacher/joins`, {params: {id: id}})
+    return axios.get(`${url}/teacher/joins`, {params: {id: id}})
         .then(res => res.data)
         .catch(err => console.log(err))
 }
@@ -119,7 +118,7 @@ export function setStatus(id, status) {
     let params = new URLSearchParams();
     params.append('id', id);
     params.append('status', status);
-    return http.post(`${url}/teacher/set`, params).catch(err => {
+    return axios.post(`${url}/teacher/set`, params).catch(err => {
         console.log(err)
     })
 
@@ -135,7 +134,7 @@ export function addStu(studentId, activityId) {
     let params = new URLSearchParams()
     params.append('studentId', studentId)
     params.append('activityId', activityId)
-    return http.post(`${url}/teacher/addStu`, params)
+    return axios.post(`${url}/teacher/addStu`, params)
         .catch(err => console.log(err))
 }
 
@@ -147,7 +146,7 @@ export function addStu(studentId, activityId) {
 export function del(id) {
     let params = new URLSearchParams()
     params.append('id', id)
-    return http.post(`${url}/teacher/del`, params)
+    return axios.post(`${url}/teacher/del`, params)
         .catch(err => {
             console.log(err)
         })
@@ -167,7 +166,7 @@ export function end(id, score, impression, img) {
     params.append('score', score)
     params.append('impression', impression)
     params.append('img', img)
-    return http.post(`${url}/teacher/end`, params)
+    return axios.post(`${url}/teacher/end`, params)
         .catch(err => console.log(err))
 }
 
@@ -177,7 +176,7 @@ export function end(id, score, impression, img) {
  * @return {Promise<string[]>}
  * */
 export function getClass(grade) {
-    return http.get(`${url}/teacher/getClass`, {params: {grade: grade}})
+    return axios.get(`${url}/teacher/getClass`, {params: {grade: grade}})
         .then(res => res.data)
         .catch(err => console.log(err))
 
@@ -190,7 +189,7 @@ export function getClass(grade) {
  * @return {Promise<string[]>}
  * */
 export function getStudent(grade, classes) {
-    return http.get(`${url}/teacher/getStudent`, {params: {grade: grade, class: classes}})
+    return axios.get(`${url}/teacher/getStudent`, {params: {grade: grade, class: classes}})
         .then(res => res.data)
         .catch(err => console.log(err))
 
@@ -203,7 +202,7 @@ export function getStudent(grade, classes) {
  * @return {Promise<object[]>}
  * */
 export function getScore(grade, classes) {
-    return http.get(`${url}/teacher/score`, {params: {grade: grade, class: classes}})
+    return axios.get(`${url}/teacher/score`, {params: {grade: grade, class: classes}})
         .then(res => res.data)
         .catch(err => console.log(err))
 }
@@ -222,7 +221,7 @@ export function add(name, introduction, date, message) {
     params.append('introduction', introduction)
     params.append('date', date)
     params.append('message', JSON.stringify(message))
-    return http.post(`${url}/teacher/add`, params)
+    return axios.post(`${url}/teacher/add`, params)
         .catch(err => console.log(err))
 }
 
@@ -236,7 +235,7 @@ export function change(p, pass) {
     let params = new URLSearchParams()
     params.append('password', p)
     params.append('newPassword', pass)
-    return http.post(`${url}/message/change`, params)
+    return axios.post(`${url}/message/change`, params)
         .then(res => res.data)
         .catch(err => {
             console.log(err)
@@ -250,7 +249,7 @@ export function change(p, pass) {
  * @param activityid {int} 活动Id
  */
 export function getPhotos(activityid) {
-    return http.get(`${url}/teacher/getPhotos`, {params: {id: activityid}})
+    return axios.get(`${url}/teacher/getPhotos`, {params: {id: activityid}})
         .then(res => res.data)
         .catch(err => {
             console.log(err)
@@ -263,7 +262,7 @@ export function getPhotos(activityid) {
  * @return {Promise.<object[]>}
  */
 export function getNotice() {
-    return http.get(`${url}/student/notice`)
+    return axios.get(`${url}/student/notice`)
         .then(res => res.data)
         .catch(err => {
             console.log(err)
@@ -276,7 +275,7 @@ export function getNotice() {
  * @param id 消息Id
  */
 export function readNotice(id) {
-    http.get(`${url}/student/readNotice`, {params: {id: id}})
+    axios.get(`${url}/student/readNotice`, {params: {id: id}})
 }
 
 //时间格式化

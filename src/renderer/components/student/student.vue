@@ -44,6 +44,10 @@
                         iconCls: 'fa fa-archive',
                         type: 'student',
                         children: []
+                    },{
+                        name:'文本编辑',
+                        leaf:true,
+                        path:'/student/text'
                     }],
                 loading: 0,
                 notices:[]
