@@ -1,24 +1,24 @@
 <template>
     <section v-loading="loading">
-        <el-table
+          <el-table
                 :data="data"
                 ref="multipleTable"
                 style="width: 100%"
                 @selection-change="handleSelectionChange">
-            <el-table-column
+             <el-table-column
                     type="selection"
                     width="55">
-            </el-table-column>
-            <el-table-column type="expand" v-if="extand">
+            </el-table-column> 
+             <el-table-column type="expand" v-if="extand">
                 <template scope="props">
                     <el-form label-position="left" inline class="demo-table-expand">
-                        <el-form-item v-for="(_,item) in form" :label="item" key="item">
-                            <span>{{props.row.Message[item] }}</span>
+                        <el-form-item v-for="(_,item) in form" :label="item" :key="item">
+                             <span>{{props.row.Message[item] }}</span> 
                         </el-form-item>
                     </el-form>
                 </template>
-            </el-table-column>
-            <el-table-column
+            </el-table-column> 
+             <el-table-column
                     label="年级"
                     prop="Grade">
             </el-table-column>
@@ -29,8 +29,8 @@
             <el-table-column
                     label="姓名"
                     prop="Name">
-            </el-table-column>
-            <el-table-column
+            </el-table-column> 
+             <el-table-column
                     prop="Status"
                     label="状态"
                     :filters="[
@@ -45,17 +45,16 @@
                             close-transition>{{scope.row.Status}}
                     </el-tag>
                 </template>
-            </el-table-column>
-        </el-table>
+            </el-table-column> 
+        </el-table>  
 
-        <!--工具条-->
-        <el-col :span="24" class="toolbar" style="padding: 20px;text-align: right">
+            <el-col :span="24" class="toolbar" style="padding: 20px;text-align: right">  
             <el-button type="primary" v-on:click="PassSelection">通过</el-button>
             <el-button type="primary" @click="FailSelection">不通过</el-button>
             <el-button type="primary" @click="dialogVIsible = true">添加学生</el-button>
             <el-button type="danger" @click="delActivity">删除活动</el-button>
-        </el-col>
-        <el-dialog title="添加同学" :model="formClass" :visible.sync="dialogVIsible" size="tiny">
+        </el-col> 
+         <el-dialog title="添加同学" :model="formClass" :visible.sync="dialogVIsible" size="tiny">
             <el-form :model="formClass">
                 <el-form-item>
                     <el-select v-model="formClass.grade" placeholder="年级" @change="getClass">
@@ -91,7 +90,7 @@
                 <el-button @click="dialogVIsible = false">取 消</el-button>
                 <el-button type="primary" @click="addStu" :loading="loadingAddStu">确 定</el-button>
             </div>
-        </el-dialog>
+        </el-dialog>  
     </section>
 </template>
 
@@ -136,7 +135,7 @@
                         this.activity = res;
                         for (let x of this.activity.Message) {
                             this.extand = true;
-                            this.form[x] = ''
+                            this.form[x.name] = ''
                         }
                         this.getJions()
                     })

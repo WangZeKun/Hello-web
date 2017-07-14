@@ -11,10 +11,10 @@
 </template>
 
 <script>
-   // import { quillEditor } from 'vue-quill-editor'
+//    import { quillEditor } from 'vue-quill-editor'
     export default{
         components:{
-            //quillEditor
+            // quillEditor
         },
         data(){
             return {
